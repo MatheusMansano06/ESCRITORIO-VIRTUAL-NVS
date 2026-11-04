@@ -30,8 +30,19 @@ O protótipo está em `prototipo/escritorio-nvs.html` e serve de referência par
 - **Relatório da noite, todo dia depois das 19:00:** o que ficou para trás.
 - **Cérebro:** Claude Haiku 5.5 só escreve o relatório. A contagem é feita por código comum.
 - **Onde roda:** Railway, 24 horas.
-- **No Sistema Novaes:** a leitura de envio pendente e a chave de serviço estão prontas no ramo `feat/agentes-leitura`, ainda sem commit e fora do ar.
+- **No Sistema Novaes:** a leitura de envio pendente e a chave de serviço estão no ar.
 
 ## Onde o projeto fica
 
-Neste PC, fora do OneDrive. É um projeto separado do NOVAES-ESTOQUE: terá repositório Git e projeto no Railway próprios, ainda não criados.
+É um projeto separado do NOVAES-ESTOQUE, com Git e Railway próprios.
+
+- **Site:** https://escritorio-production-17e6.up.railway.app, com login por senha (`ESCRITORIO_SENHA`).
+- **Git:** https://github.com/MatheusMansano06/ESCRITORIO-VIRTUAL-NVS (privado).
+- **Railway:** projeto `ESCRITORIO-VIRTUAL-NVS`, serviço `escritorio`, com os relatórios no volume `/data`.
+- **IA:** Claude Haiku 5.5 pelo plano, com `CLAUDE_CODE_OAUTH_TOKEN`, que vale 1 ano.
+
+## Pendências da Luisa
+
+- O prazo de despacho do Mercado Livre ainda vem vazio. A contagem usa a regra das 12:00, então os números não dependem dele.
+- O relatório aparece só no site. Telegram ou WhatsApp ainda não foram ligados.
+- Pedidos da Shopee em "tentar novamente" (`RETRY_SHIP`) não entram na leitura. Na conferência com o painel, os números bateram sem eles.
