@@ -66,6 +66,36 @@ test("depois de só atualizar o painel, o progresso volta a zero", async () => {
   assert.equal(l.estado().progresso, 0);
 });
 
+test("antes do horário comercial, não consulta os canais", async () => {
+  let consultas = 0;
+  const l = luisa({ lerPendentes: async () => { consultas++; return LEITURA; } }, "2026-11-05T06:59:00-03:00");
+  await l.tick();
+  assert.equal(consultas, 0);
+});
+
+test("no horário comercial, mantém o painel atualizado", async () => {
+  let consultas = 0;
+  const l = luisa({ lerPendentes: async () => { consultas++; return LEITURA; } }, "2026-11-05T07:00:00-03:00");
+  await l.tick();
+  assert.equal(consultas, 1);
+});
+
+test("depois do relatório da noite, não consulta mais até o dia seguinte", async () => {
+  let consultas = 0;
+  let horario = "2026-11-05T19:40:00-03:00";
+  const l = criarLuisa({
+    lerPendentes: async () => { consultas++; return LEITURA; },
+    escreverResumo: async () => null,
+    armazem: criarArmazem(pasta()),
+    agora: () => new Date(horario),
+  });
+  await l.tick();
+  assert.equal(consultas, 1);
+  horario = "2026-11-05T21:00:00-03:00";
+  await l.tick();
+  assert.equal(consultas, 1);
+});
+
 test("o estado informa os próximos horários", async () => {
   const l = luisa({}, "2026-11-05T15:00:00-03:00");
   assert.equal(l.estado().proximo, "19:05");

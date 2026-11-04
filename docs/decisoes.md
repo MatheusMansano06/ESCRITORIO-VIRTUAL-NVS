@@ -2,18 +2,17 @@
 
 ## Visual do escritório: aprovado em 04/11/2026
 
-O protótipo está em `prototipo/escritorio-nvs.html` e serve de referência para a versão final.
+A tela está em `frontend/public/index.html`.
 
-- **Planta:** sala principal com o mural da NVS, sala de reunião com o mural da Novaes, corredor, cabine com vidro e estoque um andar abaixo.
-- **Postos de trabalho:** 6 baias na sala principal e 1 mesa na cabine.
+- **Planta:** sala principal com o mural da NVS, sala de reunião com o mural da Novaes, corredor e cabine com vidro. Um andar abaixo ficam o estoque e, depois da porta CONVERSE, a expedição e a área coberta da entrada.
+- **Postos de trabalho:** 6 baias na sala principal, 1 mesa na cabine e, na expedição, a bancada da Luisa, o pós-venda e o notebook do estoque.
 - **Estoque:** a escada preta sai direto do corredor e desce em linha reta, e as prateleiras laranja seguem a mesma direção.
 - **Medidas:** são estimativas feitas a partir das fotos.
 
 ## Agentes
 
-- **Por enquanto:** Rafael, Julio e Matheus.
-- **Funções:** ainda serão definidas, assim como a IA de cada um (Claude ou Codex).
-- **Hoje no protótipo:** falas e tarefas são simuladas, sem IA conectada.
+- **Equipe:** Luisa (ativa), Rafael (regra definida, a construir), Julio e Matheus (sem função definida).
+- **IA:** cada agente usa só o necessário. Tarefas de conta e comparação são feitas por código comum, sem gastar tokens.
 
 ## Integração com a operação: aprovada em 04/11/2026
 
@@ -29,8 +28,17 @@ O protótipo está em `prototipo/escritorio-nvs.html` e serve de referência par
 - **Relatório da manhã, todo dia antes das 8:00:** atrasadas como urgentes, mais a quantidade a enviar hoje que não está atrasada.
 - **Relatório da noite, todo dia depois das 19:00:** o que ficou para trás.
 - **Cérebro:** Claude Haiku 5.5 só escreve o relatório. A contagem é feita por código comum.
-- **Onde roda:** Railway, 24 horas.
+- **Onde roda:** Railway. O painel só consulta os canais das 7:00 às 19:30 (Brasília), todos os dias.
 - **No Sistema Novaes:** a leitura de envio pendente e a chave de serviço estão no ar.
+
+## Agente Rafael: regra aprovada, ainda não construído
+
+- **Plataforma:** Mercado Livre, anúncios ativos.
+- **Horários:** todo dia às 7:00, 12:00 e 16:00 (Brasília).
+- **Tarefa:** listar só o SKU e o MLB dos anúncios sem promoção.
+- **Regra:** anúncio só com desconto próprio (`PRICE_DISCOUNT`) entra na lista, porque ainda falta a promoção.
+- **Cérebro:** código comum, sem gastar tokens.
+- **Falta:** uma leitura nova no Sistema Novaes, que precisa de autorização para publicar.
 
 ## Onde o projeto fica
 

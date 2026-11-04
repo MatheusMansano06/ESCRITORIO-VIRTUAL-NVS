@@ -1,5 +1,5 @@
 import type { Armazem, Relatorio } from "../armazem.ts";
-import { contar, emBrasilia, montarRelatorio, proximoHorario, relatorioDevido, type Contagem, type Leitura, type RelatorioBase, type TipoRelatorio } from "./contagem.ts";
+import { contar, emBrasilia, emHorarioComercial, montarRelatorio, proximoHorario, relatorioDevido, type Contagem, type Leitura, type RelatorioBase, type TipoRelatorio } from "./contagem.ts";
 import type { Resumo } from "./resumo.ts";
 
 const PAINEL_MINUTOS = 15;
@@ -82,7 +82,7 @@ export function criarLuisa({ lerPendentes, escreverResumo, armazem, agora = () =
     tick: () => emFila(async () => {
       const devido = relatorioDevido(agora(), armazem.feitos());
       if (devido) return produzir(devido, false);
-      if (painelVencido()) {
+      if (emHorarioComercial(agora()) && painelVencido()) {
         await ler();
         mudar({ atividade: "Aguardando o próximo relatório", progresso: 0 });
       }

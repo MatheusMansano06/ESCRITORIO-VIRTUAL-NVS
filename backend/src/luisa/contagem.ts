@@ -122,6 +122,13 @@ export function montarRelatorio(tipo: TipoRelatorio, leitura: Leitura, agora: Da
   };
 }
 
+/** Das 7:00 às 19:30 (Brasília) a Luisa mantém o painel atualizado; fora disso não consulta os canais. */
+export function emHorarioComercial(agora: Date): boolean {
+  const { hora, minuto } = emBrasilia(agora);
+  const minutos = hora * 60 + minuto;
+  return minutos >= 7 * 60 && minutos <= 19 * 60 + 30;
+}
+
 export function proximoHorario(agora: Date): string {
   const { hora, minuto } = emBrasilia(agora);
   const minutos = hora * 60 + minuto;
