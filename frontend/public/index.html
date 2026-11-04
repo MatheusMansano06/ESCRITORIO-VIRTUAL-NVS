@@ -12,128 +12,115 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{display:flex;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,"Segoe UI",sans-serif;overflow:hidden}
-button,input{font:inherit}
-#stage{position:relative;flex:1;min-width:0;overflow:hidden}
+button{font:inherit}
+#principal{flex:1;min-width:0;display:flex;flex-direction:column}
+#stage{position:relative;flex:1;min-height:0;overflow:hidden}
 #stage canvas{display:block;touch-action:none}
 #labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .tagwrap{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:4px;width:0;will-change:transform}
 .tagwrap:has(.bubble:not([hidden])){z-index:5}
 .tag{pointer-events:auto;border:0;border-radius:99px;padding:1px 7px;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.25);color:var(--ink);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
 .tag.sel{background:var(--yellow);color:#15171a}
-.tag.ring{background:var(--danger);color:#fff}
 .bubble{width:max-content;max-width:210px;padding:7px 10px;border-radius:10px;background:#fff;color:#15171a;box-shadow:0 2px 8px rgba(0,0,0,.4);font-size:12.5px;line-height:1.3;text-align:center}
 .bubble[hidden]{display:none}
-#top{position:absolute;left:14px;top:12px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
-#top>div{background:rgba(255,255,255,.88);border-radius:10px;padding:6px 10px}
+#top{position:absolute;left:14px;top:12px;pointer-events:none;background:rgba(255,255,255,.88);border-radius:10px;padding:6px 10px}
 #top h1{margin:0;font-size:19px;letter-spacing:-.01em}
 #top h1 span{color:var(--blue)}
-#top p{margin:1px 0 0;color:var(--soft);font-size:12.5px}
-#stop{pointer-events:auto;flex:none;border:0;border-radius:9px;padding:9px 14px;background:var(--danger);color:#fff;font-weight:600;cursor:pointer}
-#stop.on{background:var(--ok)}
-#views{position:absolute;left:14px;top:80px;display:flex;gap:6px;flex-wrap:wrap}
+#views{position:absolute;right:14px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 150px)}
 #views button{border:1px solid var(--line);border-radius:8px;padding:5px 10px;background:#fff;color:var(--ink);font-size:12.5px;cursor:pointer}
 #views button:hover{border-color:var(--yellow)}
-#paused{position:absolute;left:50%;top:118px;transform:translateX(-50%);padding:6px 14px;border-radius:99px;background:var(--danger);color:#fff;font-weight:600;white-space:nowrap}
-#ask{position:absolute;left:14px;right:14px;bottom:14px;display:flex;gap:8px;max-width:620px;margin:auto;padding:7px;border-radius:13px;background:var(--panel);border:1px solid var(--line);box-shadow:0 4px 16px rgba(0,0,0,.08)}
-#ask input{flex:1;min-width:0;border:0;outline-offset:2px;padding:8px 10px;background:transparent;color:var(--ink)}
-#ask button{flex:none;border:0;border-radius:9px;padding:8px 14px;background:var(--yellow);color:#15171a;font-weight:700;cursor:pointer}
-#ask button:disabled{background:#e2e0da;color:#666b73;cursor:default}
-aside{flex:none;width:300px;display:flex;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);min-height:0;overflow-y:auto}
-aside h2{margin:0;padding:12px 14px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
-#approval{margin:12px 12px 0;padding:11px;border-radius:10px;background:#fdece8;border:1px solid var(--danger)}
-#approval[hidden]{display:none}
-#approval strong{display:block;margin-bottom:8px}
-#approval button{border:0;border-radius:7px;padding:6px 12px;font-weight:600;cursor:pointer;margin-right:6px}
-#yes{background:var(--ok);color:#fff}#no{background:#e9e7e1;color:var(--ink)}
-#team{padding:0 8px;display:grid;gap:2px}
-.card{width:100%;display:block;text-align:left;border:0;background:none;color:inherit;padding:7px 8px;border-radius:9px;cursor:pointer}
-.card:hover{background:#f4f3ef}.card.sel{background:#ecebe6}
-.card .row{display:flex;align-items:center;gap:7px}
-.dot{width:10px;height:10px;border-radius:50%;flex:none}
-.card b{font-size:13.5px}.card .role{color:var(--soft);font-size:12px}
-.card .st{display:block;font-size:12.5px;color:var(--soft);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .goal{display:none;font-size:12.5px;margin-top:4px}.card.sel .goal{display:block}
-.bar{display:block;height:4px;margin-top:5px;border-radius:9px;background:#e9e7e1;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--yellow)}
-#feedbox{flex:1 0 170px;min-height:170px;display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:8px}
-#feed{flex:1;overflow:auto;margin:0;padding:0 14px 12px;list-style:none;font-size:12.5px}
-#feed li{padding:4px 0;border-bottom:1px solid #eeece6}
-#feed b{font-weight:600}
-#luisa{margin:8px 8px 0;padding:0 6px 8px;border-top:1px solid var(--line)}
-.luisa-topo{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.luisa-topo h2{padding:12px 0 6px}
-#gerar{border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);padding:3px 8px;font-size:12px;cursor:pointer}
-#gerar:hover{border-color:var(--yellow)}
-#luisa p{margin:4px 0;font-size:12.5px;color:var(--soft)}
-#l-painel{width:100%;border-collapse:collapse;font-size:12.5px}
-#l-painel th,#l-painel td{padding:3px 4px;text-align:right;font-weight:500}
-#l-painel thead th{color:var(--soft);font-size:11.5px}
-#l-painel tbody th{text-align:left}
-#l-painel td:nth-child(2){color:var(--danger);font-weight:700}
-#luisa #l-erro{color:var(--danger)}
-#l-relatorio{margin-top:6px;padding:8px;border-radius:8px;background:#f4f3ef}
-#l-relatorio h3{margin:0 0 3px;font-size:12.5px}
-#luisa #l-rel-resumo{color:var(--ink)}
-#l-rel-texto{margin:4px 0 0;font:12px/1.4 inherit;font-family:inherit;white-space:pre-wrap}
+aside{flex:none;width:280px;background:var(--panel);border-left:1px solid var(--line);overflow-y:auto}
+h2{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
+aside h2{padding:14px 16px 8px}
+#team{padding:0 8px 12px;display:grid;gap:4px}
+.card{width:100%;display:block;text-align:left;border:1px solid transparent;background:none;color:inherit;padding:9px 8px;border-radius:9px;cursor:pointer}
+.card:hover{background:#f4f3ef}
+.card.sel{background:#f4f3ef;border-color:var(--line)}
+.card .row{display:flex;align-items:baseline;gap:7px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;align-self:center}
+.card b{font-size:14px}
+.card .role{color:var(--soft);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .st{display:block;font-size:12.5px;margin-top:3px;min-height:18px}
+.bar{display:block;height:6px;margin-top:6px;border-radius:9px;background:#e9e7e1;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--yellow);transition:width .4s}
+.card .info{display:block;font-size:11.5px;color:var(--soft);margin-top:5px;min-height:16px}
+#entregas{flex:0 0 clamp(220px,36vh,340px);display:flex;flex-direction:column;background:var(--panel);border-top:1px solid var(--line);min-height:0}
+#e-topo{display:flex;align-items:center;gap:12px;padding:10px 16px 8px;border-bottom:1px solid #eeece6}
+#e-topo p{margin:0;font-size:12.5px;color:var(--soft);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#gerar{flex:none;border:0;border-radius:8px;background:var(--yellow);color:#15171a;font-weight:600;padding:5px 12px;font-size:12.5px;cursor:pointer}
+#gerar[hidden]{display:none}
+#e-corpo{flex:1;min-height:0;display:grid;grid-template-columns:minmax(230px,300px) 1fr;overflow:hidden}
+#e-corpo[hidden]{display:none}
+#e-painel{padding:10px 16px;border-right:1px solid #eeece6;overflow:auto}
+#e-painel p{margin:6px 0 0;font-size:12px;color:var(--soft)}
+#e-erro{color:var(--danger)!important}
+#e-painel table{width:100%;border-collapse:collapse;font-size:13px}
+#e-painel th,#e-painel td{padding:3px 4px;text-align:right;font-weight:500}
+#e-painel thead th{color:var(--soft);font-size:11.5px}
+#e-painel tbody th{text-align:left}
+#e-painel td:nth-child(2){color:var(--danger);font-weight:700}
+#e-lista{padding:6px 16px 10px;overflow:auto}
+#e-lista details{border-bottom:1px solid #eeece6;padding:6px 0}
+#e-lista summary{cursor:pointer;font-size:13px;font-weight:600}
+#e-lista summary span{font-weight:400;color:var(--soft);margin-left:6px;font-size:12px}
+#e-lista p{margin:5px 0 0;font-size:13px}
+#e-lista pre{margin:4px 0 0;font:12.5px/1.45 system-ui,"Segoe UI",sans-serif;white-space:pre-wrap;color:var(--soft)}
+#e-vazio{padding:16px;color:var(--soft);font-size:13px;margin:0}
 #fail{position:absolute;inset:0;display:none;place-items:center;padding:20px;text-align:center}
 @media(max-width:820px){
  body{flex-direction:column;overflow:auto}
  html,body{height:auto}
- #stage{flex:none;height:62vh}
+ #principal{flex:none}
+ #stage{flex:none;height:56vh}
+ #entregas{flex:none;height:auto;max-height:70vh}
+ #e-corpo{grid-template-columns:1fr;overflow:auto}
+ #e-painel{border-right:0;border-bottom:1px solid #eeece6}
  aside{width:100%;border-left:0;border-top:1px solid var(--line)}
- #feedbox{height:220px;flex:none}
- #top p{display:none}
- #views{top:48px}
+ #views{top:58px;right:auto;left:14px;justify-content:flex-start;max-width:calc(100% - 28px)}
 }
 </style>
 </head>
 <body>
-<main id="stage">
-  <div id="labels"></div>
-  <div id="top">
-    <div><h1><span>NVS</span> Tech</h1><p>A Luisa usa dados reais. Rafael, Julio e Matheus ainda são simulação. Arraste para girar e role para aproximar.</p></div>
-    <button id="stop" type="button">Parar tudo</button>
-  </div>
-  <div id="views" role="group" aria-label="Escolher visão">
-    <button type="button" data-view="geral">Visão geral</button>
-    <button type="button" data-view="nvs">Mural NVS</button>
-    <button type="button" data-view="novaes">Sala Novaes</button>
-    <button type="button" data-view="cabine">Cabine</button>
-    <button type="button" data-view="escada">Escada e estoque</button>
-  </div>
-  <div id="paused" hidden>Equipe parada. Nada do que foi feito se perdeu.</div>
-  <form id="ask">
-    <input id="req" aria-label="Pedido para a equipe" maxlength="80" value="Preparar a promoção de capacetes">
-    <button id="send">Pedir à equipe</button>
-  </form>
-  <div id="fail">Não consegui carregar o 3D. Confira a internet e se o navegador tem WebGL ligado.</div>
-</main>
-<aside>
-  <div id="approval" role="alert" hidden>
-    <strong id="apptxt"></strong>
-    <button id="yes" type="button">Aprovar</button><button id="no" type="button">Recusar</button>
-  </div>
-  <h2>Equipe</h2>
-  <div id="team"></div>
-  <section id="luisa" aria-labelledby="luisa-titulo">
-    <div class="luisa-topo"><h2 id="luisa-titulo">Envios: Luisa</h2><button id="gerar" type="button">Gerar agora</button></div>
-    <p id="l-sem-dados">Aguardando a primeira leitura.</p>
-    <table id="l-painel" hidden>
-      <thead><tr><th></th><th>Atrasados</th><th>Hoje</th><th>Depois</th></tr></thead>
-      <tbody>
-        <tr><th>Mercado Livre</th><td id="ml-a"></td><td id="ml-h"></td><td id="ml-p"></td></tr>
-        <tr><th>Shopee</th><td id="sh-a"></td><td id="sh-h"></td><td id="sh-p"></td></tr>
-      </tbody>
-    </table>
-    <p id="l-atualizado"></p>
-    <p id="l-erro" role="alert" hidden></p>
-    <article id="l-relatorio" hidden>
-      <h3 id="l-rel-titulo"></h3>
-      <p id="l-rel-resumo"></p>
-      <pre id="l-rel-texto"></pre>
-    </article>
+<div id="principal">
+  <main id="stage">
+    <div id="labels"></div>
+    <div id="top"><h1><span>NVS</span> Tech</h1></div>
+    <div id="views" role="group" aria-label="Escolher visão">
+      <button type="button" data-view="geral">Visão geral</button>
+      <button type="button" data-view="nvs">Mural NVS</button>
+      <button type="button" data-view="novaes">Sala Novaes</button>
+      <button type="button" data-view="cabine">Cabine</button>
+      <button type="button" data-view="escada">Escada e estoque</button>
+    </div>
+    <div id="fail">Não consegui carregar o 3D. Confira a internet e se o navegador tem WebGL ligado.</div>
+  </main>
+  <section id="entregas" aria-labelledby="e-titulo">
+    <div id="e-topo">
+      <h2 id="e-titulo"></h2>
+      <p id="e-objetivo"></p>
+      <button id="gerar" type="button">Gerar relatório agora</button>
+    </div>
+    <p id="e-vazio"></p>
+    <div id="e-corpo" hidden>
+      <div id="e-painel">
+        <table>
+          <thead><tr><th></th><th>Atrasados</th><th>Hoje</th><th>Depois</th></tr></thead>
+          <tbody>
+            <tr><th>Mercado Livre</th><td id="ml-a">-</td><td id="ml-h">-</td><td id="ml-p">-</td></tr>
+            <tr><th>Shopee</th><td id="sh-a">-</td><td id="sh-h">-</td><td id="sh-p">-</td></tr>
+          </tbody>
+        </table>
+        <p id="e-atualizado"></p>
+        <p id="e-tokens"></p>
+        <p id="e-erro" role="alert" hidden></p>
+      </div>
+      <div id="e-lista"></div>
+    </div>
   </section>
-  <div id="feedbox"><h2>Ao vivo</h2><ol id="feed" role="log" aria-live="polite"></ol></div>
+</div>
+<aside aria-labelledby="progresso-titulo">
+  <h2 id="progresso-titulo">Progresso</h2>
+  <div id="team"></div>
 </aside>
 <script>setTimeout(()=>{if(!window.__ok)document.getElementById('fail').style.display='grid'},8000)</script>
 <script type="module">
@@ -161,7 +148,7 @@ new ResizeObserver(resize).observe(stage);resize();
 
 /* ---------- Visões da câmera ---------- */
 const VIEWS={
-  geral:{t:[-3.5,-.2,1.6],az:1.2,el:.66,zoom:.94},
+  geral:{t:[-3.5,0,1.6],az:1.2,el:.66,zoom:.86},
   nvs:{t:[-8,1.6,-1.2],az:1.4,el:.3,zoom:1.5},
   novaes:{t:[1.2,1,-1.6],az:-1.05,el:.48,zoom:1.75},
   cabine:{t:[-8.4,.9,5.6],az:2.2,el:.85,zoom:2.4},
@@ -333,12 +320,12 @@ for(const z of[-5.5,-5.2,-4.9])box(.12,.24,.12,0xcfe0e4,-3.5,.98,z);
 box(.2,.3,.2,0xffffff,-3.5,1.01,-3.4);for(const z of[-4.3,-4.1])box(.05,.2,.05,z<-4.2?0x2f8f5f:0xc8352d,-3.5,.96,z);
 /* quadro de vidro */
 const board=textPlane(1.9,1.12,440,260,(c,w,h,t)=>{
-  c.fillStyle='#eef6f6';c.fillRect(0,0,w,h);c.fillStyle='#1c5fb8';c.font='700 24px system-ui';c.textBaseline='top';c.fillText('PEDIDO',16,16);
+  c.fillStyle='#eef6f6';c.fillRect(0,0,w,h);c.fillStyle='#1c5fb8';c.font='700 24px system-ui';c.textBaseline='top';c.fillText('NVS TECH',16,16);
   c.fillStyle='#1b1d20';c.font='600 26px system-ui';let line='',y=58;
   for(const wd of t.split(' ')){if(c.measureText(line+wd).width>w-32){c.fillText(line,16,y);y+=34;line=''}line+=wd+' '}
   c.fillText(line,16,y);
 });
-board.paint('Nenhum pedido em andamento');board.mesh.position.set(-3.13,1.95,-4.2);board.mesh.rotation.y=-Math.PI/2;scene.add(board.mesh);
+board.paint('Expediente em andamento');board.mesh.position.set(-3.13,1.95,-4.2);board.mesh.rotation.y=-Math.PI/2;scene.add(board.mesh);
 /* ar-condicionado e persianas na parede do fundo */
 box(1.3,.34,.26,0xf1f1f1,-5.7,3.1,Z0+.12,wFundo);
 box(2.4,1.5,.04,0x1d1e21,0,1.95,Z0+.03,wFundo);
@@ -406,25 +393,19 @@ lamp.position.set(-.2,1.55,6.6);scene.add(lamp);
 
 /* ---------- Equipe ---------- */
 const TEAM=[
- {name:'Rafael',desk:1,meetSeat:1,shirt:0x2f7fe0,skin:0xe8b48f,hair:0x2a1d15,meet:'Fico com a primeira parte do pedido.',jobName:'Executar a primeira parte',steps:['Analisou o pedido','Fechou o rascunho']},
- {name:'Julio',desk:4,meetSeat:2,shirt:0xf5c518,skin:0xc98f65,hair:0x17120e,meet:'Vou conferir os valores antes de liberar.',jobName:'Conferir os valores',steps:['Levantou os custos','Fechou os valores']},
- {name:'Matheus',desk:2,meetSeat:4,shirt:0x25282c,skin:0xf0c7a4,hair:0x4a4038,meet:'Cuido da operação e do estoque.',jobName:'Preparar a operação',steps:['Conferiu o estoque','Deixou tudo separado']},
- {name:'Luisa',real:true,desk:0,meetSeat:0,shirt:0x8a5fa8,skin:0xe8b48f,hair:0x6b3c1f,role:'Controle de envios',goal:'Contar o que precisa sair hoje e avisar o que ficou para trás. Usa Claude Haiku 5.5.',idle:['Aguardando','Aguardando'],meet:'',jobName:'',steps:[]},
-].map(t=>({role:'Função a definir',goal:'A definir com você.',idle:['Analisando tarefas','Organizando a fila'],...t}));
+ {name:'Rafael',desk:1,shirt:0x2f7fe0,skin:0xe8b48f,hair:0x2a1d15},
+ {name:'Julio',desk:4,shirt:0xf5c518,skin:0xc98f65,hair:0x17120e},
+ {name:'Matheus',desk:2,shirt:0x25282c,skin:0xf0c7a4,hair:0x4a4038},
+ {name:'Luisa',real:true,desk:0,shirt:0x8a5fa8,skin:0xe8b48f,hair:0x6b3c1f,role:'Controle de envios',goal:'Conta o que precisa sair hoje e avisa o que ficou para trás.',idle:'Aguardando'},
+].map(t=>({role:'Função a definir',goal:'',idle:'Aguardando função',...t}));
 
 const hub=(i,z)=>[-7+i*.12,z];
-const toCorridor=i=>[[1.9,-.1],[1.9,3.1],[-2,3.45],[-3.8,3.45],hub(i,3.45)];
 const bayDesk=(x,ang)=>z=>({seat:[x,z],ang,chain:i=>[hub(i,z)]});
 const DESKS=[
  ...bayCenters(BAYS_JANELA).map(bayDesk(-5.1,Math.PI/2)),
  ...bayCenters(BAYS_MURAL).map(bayDesk(-7.9,-Math.PI/2)),
  {seat:[-8,5.9],ang:-Math.PI/2,chain:i=>[[-8,4.6],[-9.4,4.5],[-9.4,3.45],hub(i,3.45)]},
 ].map(d=>({...d,kind:'desk',seated:true}));
-const MEET=[
- ...SEATS.map(([x,z])=>({seat:[x,z],ang:x<0?Math.PI/2:-Math.PI/2,
-   chain:i=>x<0?[[-2.45,z],[-2.45,-.1],...toCorridor(i)]:[[2.45,z],[2.45,-.1],...toCorridor(i)]})),
- {seat:[0,-5.6],ang:0,chain:i=>[[-2.45,-5.6],[-2.45,-.1],...toCorridor(i)]},
-].map(m=>({...m,kind:'meet',seated:true}));
 const sofaSpot=z=>({seat:[-9.2,z],ang:Math.PI/2,seated:true,chain:i=>[[-7.8,z],hub(i,z)]});
 const coffeeSpot=z=>({seat:[-4.5,z],ang:Math.PI/2,seated:false,chain:i=>[hub(i,z)]});
 const REST=[sofaSpot(-4.1),coffeeSpot(-5.4),coffeeSpot(-4.6),sofaSpot(-2.5),coffeeSpot(-3.8),sofaSpot(-3.3),coffeeSpot(-3)].map(r=>({...r,kind:'rest'}));
@@ -457,8 +438,8 @@ function makeStation(place){
   screen.mesh.position.set(0,1.74,1.415);screen.mesh.rotation.y=Math.PI;g.add(screen.mesh);
   box(.7,.04,.28,0xdddddd,0,1.07,.98,g);
   box(.13,.18,.13,0xf7f3ea,-.56,1.14,1.05,g);
-  const phoneMat=new THREE.MeshStandardMaterial({color:0x2a2a2a,emissive:0x000000});
-  place.st={screen,phoneMat,phone:box(.3,.1,.24,phoneMat,.56,1.1,1.05,g)};
+  box(.3,.1,.24,0x2a2a2a,.56,1.1,1.05,g);
+  place.st={screen};
 }
 function drawScreen(c,w,h,a){
   if(!a){c.fillStyle='#0c0d0f';c.fillRect(0,0,w,h);return} /* baia livre */
@@ -466,48 +447,40 @@ function drawScreen(c,w,h,a){
   c.fillStyle=away?'#2a2e33':'#0f1d2b';c.fillRect(0,0,w,h);c.textBaseline='top';
   if(away){c.fillStyle='#8b949c';c.font='600 20px system-ui';c.textAlign='center';c.fillText('Ausente',w/2,h/2-12);c.textAlign='left';return}
   c.textAlign='left';c.fillStyle='#fff';c.font='600 17px system-ui';c.fillText(a.activity.slice(0,26),12,10);
+  if(!a.progresso)return;
   a.codeSeed=(a.codeSeed||0)+1;
   for(let i=0;i<6;i++){
     const n=Math.sin((i+a.codeSeed)*12.9+a.i*7)*43758.5,f=n-Math.floor(n);
     c.fillStyle=['#f5c518','#54a7e8','#9cc4ff','#e8e8e8'][Math.floor(f*4)];
     c.fillRect(12+(i%3)*12,38+i*15,50+f*170,7);
   }
-  if(a.job){c.fillStyle='#31424e';c.fillRect(12,h-14,w-24,7);c.fillStyle='#f5c518';c.fillRect(12,h-14,(w-24)*a.job.p,7)}
+  c.fillStyle='#31424e';c.fillRect(12,h-14,w-24,7);c.fillStyle='#f5c518';c.fillRect(12,h-14,(w-24)*a.progresso/100,7);
 }
 DESKS.forEach(makeStation);
 const agents=TEAM.map((t,i)=>{
   const home=DESKS[t.desk];
-  const a={...t,...home.st,i,home,place:home,target:home,x:home.seat[0],z:home.seat[1],ang:home.ang,rot:home.ang,path:[],activity:t.idle[0],job:null,seatT:1,phase:i,idleN:0,sayUntil:0};
+  const a={...t,...home.st,i,home,place:home,target:home,x:home.seat[0],z:home.seat[1],ang:home.ang,rot:home.ang,path:[],activity:t.idle,progresso:0,seatT:1,phase:i,sayUntil:0};
   home.owner=a;a.g=makePerson(a);return a;
 });
-const simulados=agents.filter(a=>!a.real);
 const ringMark=new THREE.Mesh(new THREE.RingGeometry(.55,.72,32),new THREE.MeshBasicMaterial({color:0xf5c518,side:THREE.DoubleSide}));
 ringMark.rotation.x=-Math.PI/2;ringMark.visible=false;scene.add(ringMark);
 
-/* ---------- Rótulos e painel ---------- */
-let selected=null;
+/* ---------- Rótulos e progresso ---------- */
 for(const a of agents){
   const wrap=document.createElement('div');wrap.className='tagwrap';
   const bubble=document.createElement('div');bubble.className='bubble';bubble.hidden=true;
   const tag=document.createElement('button');tag.type='button';tag.className='tag';tag.textContent=a.name;tag.onclick=()=>select(a);
   wrap.append(bubble,tag);labels.append(wrap);Object.assign(a,{wrap,bubble,tag});
   const card=document.createElement('button');card.type='button';card.className='card';
-  card.innerHTML=`<span class="row"><span class="dot" style="background:#${a.shirt.toString(16).padStart(6,'0')}"></span><b></b><span class="role"></span></span><span class="st"></span><span class="goal"></span><span class="bar"><i></i></span>`;
+  card.innerHTML=`<span class="row"><span class="dot" style="background:#${a.shirt.toString(16).padStart(6,'0')}"></span><b></b><span class="role"></span></span><span class="st"></span><span class="bar"><i></i></span><span class="info"></span>`;
   card.querySelector('b').textContent=a.name;card.querySelector('.role').textContent=a.role;
-  card.querySelector('.goal').textContent='Objetivo: '+a.goal;card.querySelector('.st').textContent=a.activity;
   card.onclick=()=>select(a);$('#team').append(card);
-  Object.assign(a,{card,stEl:card.querySelector('.st'),barEl:card.querySelector('.bar i')});
+  Object.assign(a,{card,stEl:card.querySelector('.st'),barEl:card.querySelector('.bar i'),infoEl:card.querySelector('.info')});
 }
-function select(a){selected=selected===a?null:a;for(const b of agents){b.card.classList.toggle('sel',b===selected);b.tag.classList.toggle('sel',b===selected)}}
-function log(who,txt){
-  const li=document.createElement('li');
-  if(who){const b=document.createElement('b');b.textContent=who+': ';li.append(b)}
-  li.append(txt);const f=$('#feed');f.prepend(li);while(f.children.length>50)f.lastChild.remove();
-}
-function say(a,txt,dur=3){a.bubble.textContent=txt;a.bubble.hidden=false;a.sayUntil=sim+dur;log(a.name,txt)}
+function say(a,txt,dur=3){a.bubble.textContent=txt;a.bubble.hidden=false;a.sayUntil=sim+dur}
 
-/* ---------- Simulação ---------- */
-let sim=0,paused=false,mode='idle',meetingOn=false;const queue=[];
+/* ---------- Rotina no escritório ---------- */
+let sim=0;const queue=[];
 const at=(d,fn)=>queue.push({t:sim+d,fn});
 function goTo(a,to,label,after){
   const run=()=>{
@@ -520,72 +493,16 @@ function arrive(a){
   a.place=a.target;a.ang=a.place.ang;
   if(a.queued){const q=a.queued;a.queued=null;q()}else a.after&&a.after();
 }
-function backToDesk(a){goTo(a,a.home,'Voltando para a mesa',()=>{if(!a.job)a.activity=a.idle[a.idleN%2]})}
+function backToDesk(a){goTo(a,a.home,'Voltando para a mesa',()=>{a.activity=a.idle})}
 function rest(a){
-  if(mode!=='idle'||a.place!==a.home||a.path.length)return;
+  if(a.progresso||a.place!==a.home||a.path.length)return;
   const spot=REST[a.i];
-  log(a.name,spot.seated?'foi para o sofá':'foi tomar um café');
-  goTo(a,spot,spot.seated?'Indo para o sofá':'Indo tomar café',()=>{a.activity=spot.seated?'Descansando no sofá':'Tomando café';at(6+Math.random()*3,()=>{if(mode==='idle'&&a.place===spot)backToDesk(a)})});
+  goTo(a,spot,spot.seated?'Indo para o sofá':'Indo tomar café',()=>{a.activity=spot.seated?'No sofá':'Tomando café';at(8+Math.random()*6,()=>{if(a.place===spot)backToDesk(a)})});
 }
-function request(txt){
-  mode='meeting';$('#send').disabled=true;$('#send').textContent='Em andamento';
-  board.paint(txt);log('Você',txt);
-  for(const a of simulados)goTo(a,MEET[a.meetSeat],'Indo para a reunião',()=>{a.activity='Em reunião';if(simulados.every(b=>b.place.kind==='meet'&&!b.path.length))startMeeting(txt)});
-}
-function startMeeting(txt){
-  if(meetingOn)return;meetingOn=true;
-  const speech=[[agents[0],`Pedido novo: "${txt}".`],...simulados.map(a=>[a,a.meet]),[agents[0],'Combinado. Todo mundo para a mesa!']];
-  speech.forEach(([a,t],i)=>at(1+i*2.6,()=>say(a,t,2.5)));
-  at(1+speech.length*2.6,()=>{
-    meetingOn=false;mode='doing';
-    for(const a of simulados){
-      a.job={p:0,dur:13+a.i*1.8,name:a.jobName,step:0,asked:false};
-      goTo(a,a.home,'Voltando para a mesa',()=>{a.activity=a.job?a.job.name:a.idle[0]});
-    }
-  });
-}
-function finish(a){
-  log(a.name,'entregou: '+a.job.name.toLowerCase());a.job=null;a.activity='Entrega feita';
-  if(simulados.every(b=>!b.job)){
-    mode='idle';$('#send').disabled=false;$('#send').textContent='Pedir à equipe';
-    say(agents[0],'Pedido pronto!',3.5);board.paint('Pedido entregue');
-  }
-}
-function work(a,dt){
-  const j=a.job;if(!j||a.place!==a.home||a.path.length||a.ring)return;
-  j.p=Math.min(1,j.p+dt/j.dur);
-  if(a.i===1&&!j.asked&&j.p>=.6){
-    j.asked=true;a.ring=true;a.activity='Esperando a sua aprovação';a.tag.classList.add('ring');
-    log(a.name,'o telefone tocou: precisa da sua aprovação');
-    $('#apptxt').textContent=`${a.name} pede a sua aprovação: liberar os valores deste pedido?`;$('#approval').hidden=false;
-    return;
-  }
-  if(j.step<2&&j.p>=(j.step+1)*.33){log(a.name,a.steps[j.step]);a.activity=a.steps[j.step];j.step++}
-  if(j.p>=1)finish(a);
-}
-function answer(ok){
-  const a=agents.find(b=>b.ring);if(!a)return;
-  a.ring=false;a.tag.classList.remove('ring');$('#approval').hidden=true;a.activity=a.job.name;
-  a.phoneMat.emissive.setHex(0);a.phone.rotation.z=0;
-  log('Você',ok?'aprovou os valores':'recusou os valores');
-  log(a.name,ok?'seguindo com o que foi aprovado':'refazendo os valores');
-}
-$('#yes').onclick=()=>answer(true);$('#no').onclick=()=>answer(false);
-$('#ask').onsubmit=e=>{e.preventDefault();const t=$('#req').value.trim();if(!t||mode!=='idle'||paused)return;request(t)};
-$('#stop').onclick=()=>{
-  paused=!paused;$('#paused').hidden=!paused;
-  $('#stop').textContent=paused?'Continuar':'Parar tudo';$('#stop').classList.toggle('on',paused);
-  log('',paused?'Equipe parada por você':'Equipe voltou ao trabalho');
-};
-log('','Expediente aberto');
-at(2.5,()=>rest(agents[0]));at(7,()=>rest(agents[1]));
-let nextIdle=16;
+let nextIdle=6;
 function idleTick(){
-  if(sim<nextIdle)return;nextIdle=sim+6+Math.random()*8;
-  if(mode!=='idle')return;
-  const a=simulados[Math.floor(Math.random()*simulados.length)];
-  if(a.place!==a.home)return;
-  if(Math.random()<.45)rest(a);else{a.idleN++;a.activity=a.idle[a.idleN%2]}
+  if(sim<nextIdle)return;nextIdle=sim+10+Math.random()*12;
+  rest(agents[Math.floor(Math.random()*agents.length)]);
 }
 
 /* ---------- Animação ---------- */
@@ -602,29 +519,27 @@ function animate(a,dt){
   let dr=a.ang-a.rot;dr=Math.atan2(Math.sin(dr),Math.cos(dr));a.rot+=dr*Math.min(1,dt*11);
   a.g.position.set(a.x,-.2*a.seatT,a.z);a.g.rotation.y=a.rot;
   a.phase+=dt;
-  const sw=walking?Math.sin(a.phase*10):0,talking=sim<a.sayUntil;
+  const sw=walking?Math.sin(a.phase*10):0;
   let al=-sw*.55,ar=sw*.55;
-  if(!walking&&a.place.kind==='desk'&&!a.ring){al=-1.25+Math.sin(a.phase*23)*.07;ar=-1.25+Math.sin(a.phase*23+2)*.07}
-  else if(!walking&&a.place.kind==='meet'){al=-.75;ar=talking?-1.25+Math.sin(a.phase*7)*.3:-.75}
-  else if(a.ring){al=-.6;ar=-1.9}
+  if(!walking&&a.place.kind==='desk'){
+    if(a.progresso){al=-1.25+Math.sin(a.phase*23)*.07;ar=-1.25+Math.sin(a.phase*23+2)*.07}
+    else{al=-1.05;ar=-1.05}
+  }
   else if(!walking&&a.place.kind==='rest'&&!a.place.seated){ar=-1.75;al=0}
   a.armL.rotation.x=lerp(a.armL.rotation.x,al,k);a.armR.rotation.x=lerp(a.armR.rotation.x,ar,k);
   const leg=-1.45*a.seatT;
   a.legL.rotation.x=lerp(a.legL.rotation.x,leg+sw*.6,k);a.legR.rotation.x=lerp(a.legR.rotation.x,leg-sw*.6,k);
-  if(a.ring){const p=Math.sin(sim*12);a.phoneMat.emissive.setRGB(p>0?.9:.25,.05,.03);a.phone.rotation.z=p*.14}
 }
 const v=new THREE.Vector3(),tmpT=new THREE.Vector3();let last=performance.now(),paintT=0,uiT=0;
 function frame(now){
   requestAnimationFrame(frame);
   const raw=(now-last)/1000;last=now;const dt=Math.min(raw,.1);
-  if(!paused){
-    sim+=dt;
-    for(let i=queue.length-1;i>=0;i--)if(queue[i].t<=sim){const f=queue[i].fn;queue.splice(i,1);f()}
-    idleTick();
-    for(const a of agents){animate(a,dt);work(a,dt)}
-    for(const f of fans)f.blades.rotation.z+=dt*7;
-    paintT+=dt;if(paintT>.6){paintT=0;for(const a of agents)a.screen.paint()}
-  }
+  sim+=dt;
+  for(let i=queue.length-1;i>=0;i--)if(queue[i].t<=sim){const f=queue[i].fn;queue.splice(i,1);f()}
+  idleTick();
+  for(const a of agents)animate(a,dt);
+  for(const f of fans)f.blades.rotation.z+=dt*7;
+  paintT+=dt;if(paintT>.6){paintT=0;for(const a of agents)a.screen.paint()}
   if(tween){
     const k=Math.min(1,raw*3.5),p=viewPos(tween);
     cam.position.lerp(p,k);controls.target.lerp(tmpT.set(...tween.t),k);cam.zoom=lerp(cam.zoom,tween.zoom,k);cam.updateProjectionMatrix();
@@ -640,7 +555,7 @@ function frame(now){
     v.set(a.x,a.g.position.y+2.3,a.z).project(cam);
     a.wrap.style.transform=`translate(${(v.x+1)/2*w}px,${(1-v.y)/2*h}px) translateY(-100%)`;
     if(!a.bubble.hidden&&sim>a.sayUntil)a.bubble.hidden=true;
-    if(uiT>.2){a.stEl.textContent=a.activity;a.barEl.style.width=(a.job?a.job.p*100:0)+'%'}
+    if(uiT>.2){a.stEl.textContent=a.activity;a.barEl.style.width=a.progresso+'%'}
   }
   if(uiT>.2)uiT=0;
   if(selected){ringMark.visible=true;ringMark.position.set(selected.x,.06,selected.z)}else ringMark.visible=false;
@@ -649,30 +564,64 @@ function frame(now){
 for(const d of DESKS)d.st.screen.paint();
 requestAnimationFrame(frame);
 
-/* ---------- Luisa: dados reais vindos do servidor ---------- */
+/* ---------- Entregas: o que cada um fez ---------- */
 const luisa=agents.find(a=>a.real);
 const NOME_TIPO={manha:'Relatório da manhã',noite:'Relatório da noite'};
-let ultimoRelatorio=null;
+const hora=d=>new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const data=d=>new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+const mesmoDia=(a,b)=>new Date(a).toDateString()===new Date(b).toDateString();
+let selected=luisa,ultimoRelatorio=null,idsNaLista='';
+
+function select(a){
+  selected=a;
+  for(const b of agents){b.card.classList.toggle('sel',b===a);b.tag.classList.toggle('sel',b===a)}
+  $('#e-titulo').textContent=`Entregas: ${a.name}`;
+  $('#e-objetivo').textContent=a.goal;
+  $('#gerar').hidden=!a.real;
+  $('#e-corpo').hidden=!a.real;
+  $('#e-vazio').hidden=!!a.real;
+  $('#e-vazio').textContent=`${a.name} ainda não tem função definida, então não há entregas.`;
+}
+
+function montarLista(relatorios){
+  const ids=relatorios.map(r=>r.id).join();
+  if(ids===idsNaLista)return; /* não fecha o que a pessoa abriu quando só o progresso muda */
+  idsNaLista=ids;
+  const lista=$('#e-lista');lista.replaceChildren();
+  if(!relatorios.length){const p=document.createElement('p');p.textContent='Nenhum relatório ainda.';lista.append(p);return}
+  relatorios.forEach((r,i)=>{
+    const d=document.createElement('details');d.open=i===0;
+    const s=document.createElement('summary');
+    s.textContent=r.manual?'Relatório gerado na hora':NOME_TIPO[r.tipo];
+    const q=document.createElement('span');q.textContent=`${data(r.geradoEm)}${r.tokens?` · ${r.tokens.toLocaleString('pt-BR')} tokens`:''}`;s.append(q);
+    d.append(s);
+    if(r.resumo){const p=document.createElement('p');p.textContent=r.resumo;d.append(p)}
+    const t=document.createElement('pre');t.textContent=r.texto;d.append(t);
+    lista.append(d);
+  });
+}
+
 function mostrarLuisa({estado,relatorios}){
-  luisa.activity=estado.atividade;
+  luisa.idle=estado.atividade;luisa.progresso=estado.progresso>0&&estado.progresso<100?estado.progresso:0;
+  if(luisa.progresso&&luisa.place!==luisa.home)goTo(luisa,luisa.home,estado.atividade,()=>{luisa.activity=luisa.idle});
+  else if(luisa.place===luisa.home&&!luisa.path.length)luisa.activity=estado.atividade;
   if(estado.painel){
-    const celulas={'ml':estado.painel.mercado_livre,'sh':estado.painel.shopee};
-    for(const[prefixo,c]of Object.entries(celulas)){
+    for(const[prefixo,c]of[['ml',estado.painel.mercado_livre],['sh',estado.painel.shopee]]){
       $(`#${prefixo}-a`).textContent=c.atrasados;$(`#${prefixo}-h`).textContent=c.hoje;$(`#${prefixo}-p`).textContent=c.proximos;
     }
-    $('#l-painel').hidden=false;$('#l-sem-dados').hidden=true;
   }
-  $('#l-atualizado').textContent=estado.atualizadoEm?`Atualizado às ${new Date(estado.atualizadoEm).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'';
-  $('#l-erro').hidden=!estado.erro;$('#l-erro').textContent=estado.erro?`Atenção: ${estado.erro}`:'';
+  $('#e-atualizado').textContent=estado.atualizadoEm?`Painel atualizado às ${hora(estado.atualizadoEm)}`:'Aguardando a primeira leitura.';
+  $('#e-erro').hidden=!estado.erro;$('#e-erro').textContent=estado.erro?`Atenção: ${estado.erro}`:'';
+  const agora=Date.now();
+  const tokens=relatorios.filter(r=>mesmoDia(r.geradoEm,agora)).reduce((t,r)=>t+(r.tokens||0),0);
+  $('#e-tokens').textContent=`Tokens gastos hoje: ${tokens.toLocaleString('pt-BR')}`;
   const r=relatorios[0];
-  if(!r)return;
-  $('#l-relatorio').hidden=false;
-  $('#l-rel-titulo').textContent=`${r.manual?'Relatório gerado na hora':NOME_TIPO[r.tipo]},${new Date(r.geradoEm).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}`;
-  $('#l-rel-resumo').textContent=r.resumo||'';$('#l-rel-resumo').hidden=!r.resumo;
-  $('#l-rel-texto').textContent=r.texto;
-  if(ultimoRelatorio&&r.id!==ultimoRelatorio)say(luisa,'Relatório pronto!',4);
-  ultimoRelatorio=r.id;
+  luisa.infoEl.textContent=`${r?`Última entrega: ${data(r.geradoEm)} · `:''}Próxima: ${estado.proximo}`;
+  montarLista(relatorios);
+  if(r&&ultimoRelatorio&&r.id!==ultimoRelatorio)say(luisa,'Relatório pronto!',4);
+  if(r)ultimoRelatorio=r.id;
 }
+select(luisa);
 fetch('api/luisa').then(r=>r.ok?r.json():null).then(d=>d&&mostrarLuisa(d)).catch(()=>{});
 new EventSource('api/eventos').addEventListener('luisa',e=>mostrarLuisa(JSON.parse(e.data)));
 $('#gerar').onclick=()=>fetch('api/luisa/gerar',{method:'POST',headers:{'x-escritorio':'1'}}).catch(()=>{});

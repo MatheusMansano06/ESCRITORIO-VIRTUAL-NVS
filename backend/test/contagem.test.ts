@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { contar, diaDeEnvio, montarRelatorio, relatorioDevido, type Pacote } from "../src/luisa/contagem.ts";
+import { contar, diaDeEnvio, montarRelatorio, proximoHorario, relatorioDevido, type Pacote } from "../src/luisa/contagem.ts";
 
 const AGORA = new Date("2026-11-05T10:00:00-03:00");
 
@@ -105,4 +105,11 @@ test("relatório já feito no dia não repete", () => {
   assert.equal(relatorioDevido(horario("08:00"), new Set(["2026-11-05-manha"])), null);
   assert.equal(relatorioDevido(horario("20:00"), new Set(["2026-11-05-noite"])), null);
   assert.equal(relatorioDevido(horario("20:00"), new Set(["2026-11-04-noite"])), "noite");
+});
+
+test("o próximo horário muda ao longo do dia", () => {
+  assert.equal(proximoHorario(horario("06:00")), "07:30");
+  assert.equal(proximoHorario(horario("07:30")), "19:05");
+  assert.equal(proximoHorario(horario("15:00")), "19:05");
+  assert.equal(proximoHorario(horario("19:05")), "07:30");
 });

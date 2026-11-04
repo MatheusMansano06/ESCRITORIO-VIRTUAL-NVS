@@ -36,7 +36,7 @@ O protótipo está em `prototipo/escritorio-nvs.html` e serve de referência par
 
 É um projeto separado do NOVAES-ESTOQUE, com Git e Railway próprios.
 
-- **Site:** https://escritorio-production-17e6.up.railway.app, com login por senha (`ESCRITORIO_SENHA`).
+- **Site:** https://escritorio-production-17e6.up.railway.app, sem login por decisão do dono. Quem tiver o link vê as contagens e pode gerar um relatório a cada 5 minutos. A tela não traz dados de clientes.
 - **Git:** https://github.com/MatheusMansano06/ESCRITORIO-VIRTUAL-NVS (privado).
 - **Railway:** projeto `ESCRITORIO-VIRTUAL-NVS`, serviço `escritorio`, com os relatórios no volume `/data`.
 - **IA:** Claude Haiku 5.5 pelo plano, com `CLAUDE_CODE_OAUTH_TOKEN`, que vale 1 ano.

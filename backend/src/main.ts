@@ -19,7 +19,6 @@ const luisa = criarLuisa({
 });
 
 const servidor = criarServidor({
-  senha: process.env.ESCRITORIO_SENHA ?? "",
   luisa,
   publico: fileURLToPath(new URL("../../frontend/public", import.meta.url)),
   inscrever(enviar) {
@@ -33,7 +32,6 @@ process.on("unhandledRejection", (e) => console.error("[escritorio] erro:", e));
 const porta = Number(process.env.PORT ?? 3000);
 servidor.listen(porta, () => {
   console.log(`[escritorio] no ar na porta ${porta}`);
-  if (!process.env.ESCRITORIO_SENHA) console.error("[escritorio] ESCRITORIO_SENHA vazia: ninguém consegue entrar");
   void luisa.tick();
   setInterval(() => void luisa.tick(), CICLO_MS);
 });

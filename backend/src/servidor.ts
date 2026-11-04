@@ -1,4 +1,3 @@
-import { createHash, timingSafeEqual } from "node:crypto";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { extname, join, resolve, sep } from "node:path";
@@ -10,6 +9,7 @@ const TIPOS: Record<string, string> = {
 const SEGURANCA = {
   "x-content-type-options": "nosniff",
   "referrer-policy": "no-referrer",
+  "x-robots-tag": "noindex, nofollow",
   "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://cdn.jsdelivr.net; frame-ancestors 'none'",
 };
 
@@ -20,21 +20,10 @@ type LuisaNaTela = {
 };
 
 type Opcoes = {
-  senha: string;
   luisa: LuisaNaTela;
   publico: string;
   inscrever: (enviar: (dados: unknown) => void) => () => void;
 };
-
-const resumoHash = (texto: string) => createHash("sha256").update(texto).digest();
-
-// ponytail: login nativo do navegador (HTTP Basic) com senha longa; trocar por contas quando houver mais usuários.
-function senhaConfere(cabecalho: string | undefined, senha: string): boolean {
-  if (!senha || !cabecalho?.startsWith("Basic ")) return false;
-  const texto = Buffer.from(cabecalho.slice(6), "base64").toString("utf8");
-  const informada = texto.slice(texto.indexOf(":") + 1);
-  return timingSafeEqual(resumoHash(informada), resumoHash(senha));
-}
 
 function json(res: ServerResponse, status: number, dados: unknown) {
   res.writeHead(status, { ...SEGURANCA, "content-type": "application/json", "cache-control": "no-store" });
@@ -65,21 +54,17 @@ function eventos(req: IncomingMessage, res: ServerResponse, inscrever: Opcoes["i
   });
 }
 
-export function criarServidor({ senha, luisa, publico, inscrever }: Opcoes) {
+export function criarServidor({ luisa, publico, inscrever }: Opcoes) {
   return createServer((req, res) => {
     const { pathname } = new URL(req.url ?? "/", "http://local");
     if (req.method === "GET" && pathname === "/health") return json(res, 200, { ok: true });
 
-    if (!senhaConfere(req.headers.authorization, senha)) {
-      res.writeHead(401, { ...SEGURANCA, "www-authenticate": 'Basic realm="Escritorio NVS", charset="UTF-8"' });
-      return res.end();
-    }
     if (req.method === "GET" && pathname === "/api/luisa") {
       return json(res, 200, { estado: luisa.estado(), relatorios: luisa.relatorios().slice(0, 20) });
     }
     if (req.method === "GET" && pathname === "/api/eventos") return eventos(req, res, inscrever);
     if (req.method === "POST" && pathname === "/api/luisa/gerar") {
-      // Outro site não consegue enviar este cabeçalho, mesmo com o login guardado no navegador (CSRF).
+      // Outro site aberto no navegador não consegue enviar este cabeçalho (CSRF).
       if (req.headers["x-escritorio"] !== "1") return json(res, 403, { erro: "pedido recusado" });
       luisa.gerarAgora().catch((e) => console.error("[luisa] gerar:", (e as Error).message));
       return json(res, 202, { ok: true });

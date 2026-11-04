@@ -122,6 +122,13 @@ export function montarRelatorio(tipo: TipoRelatorio, leitura: Leitura, agora: Da
   };
 }
 
+export function proximoHorario(agora: Date): string {
+  const { hora, minuto } = emBrasilia(agora);
+  const minutos = hora * 60 + minuto;
+  if (minutos < MANHA.de) return "07:30";
+  return minutos < NOITE.de ? "19:05" : "07:30";
+}
+
 /** Qual relatório do horário ainda falta hoje. A janela larga cobre um reinício do servidor. */
 export function relatorioDevido(agora: Date, feitos: Set<string>): TipoRelatorio | null {
   const { dia, hora, minuto } = emBrasilia(agora);

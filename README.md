@@ -2,14 +2,14 @@
 
 Escritório virtual em 3D onde agentes de IA trabalham como uma equipe.
 
-Hoje a Luisa funciona com dados reais. Rafael, Julio e Matheus ainda são simulação.
+Hoje a Luisa funciona com dados reais. Rafael, Julio e Matheus ainda aguardam função.
 
 ## Organização
 
 | Pasta | O que guarda |
 |---|---|
 | `frontend/public/` | A tela: escritório 3D e painéis |
-| `backend/src/` | O servidor: login, horários, relatórios e leitura do Sistema Novaes |
+| `backend/src/` | O servidor: horários, relatórios e leitura do Sistema Novaes |
 | `backend/test/` | Testes automáticos |
 | `agentes/` | As instruções de cada agente |
 | `docs/` | Decisões do projeto |
@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-O site abre em `http://localhost:3000`. O navegador pede a senha `ESCRITORIO_SENHA`, e o usuário pode ser qualquer um.
+O site abre em `http://localhost:3000`.
 
 ## Testes
 

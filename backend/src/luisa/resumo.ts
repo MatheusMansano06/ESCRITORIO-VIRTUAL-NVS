@@ -7,6 +7,14 @@ const INSTRUCOES = readFileSync(new URL("../../../agentes/luisa.md", import.meta
 const LIMITE_MS = 90_000;
 
 type Resultado = { subtype: string; is_error?: boolean; result?: string };
+type UsoModelo = { inputTokens?: number; outputTokens?: number; cacheReadInputTokens?: number; cacheCreationInputTokens?: number };
+
+export type Resumo = { texto: string | null; tokens: number };
+
+export function tokensDoResultado({ modelUsage }: { modelUsage?: Record<string, UsoModelo> }): number {
+  return Object.values(modelUsage ?? {}).reduce((total, u) =>
+    total + (u.inputTokens ?? 0) + (u.outputTokens ?? 0) + (u.cacheReadInputTokens ?? 0) + (u.cacheCreationInputTokens ?? 0), 0);
+}
 
 /** Falha do Claude pode chegar como "success" com is_error; esse texto nunca pode ir para o relatório. */
 export function textoDoResultado(mensagem: Resultado): string | null {
@@ -15,7 +23,7 @@ export function textoDoResultado(mensagem: Resultado): string | null {
 }
 
 /** O Haiku só escreve a frase de abertura. Recebe apenas números, sem ferramentas nem dados de clientes. */
-export async function escreverResumo(relatorio: RelatorioBase): Promise<string | null> {
+export async function escreverResumo(relatorio: RelatorioBase): Promise<Resumo | null> {
   const parar = new AbortController();
   const relogio = setTimeout(() => parar.abort(), LIMITE_MS);
   try {
@@ -24,7 +32,7 @@ export async function escreverResumo(relatorio: RelatorioBase): Promise<string |
       prompt: JSON.stringify(dados),
       options: { model: MODELO, systemPrompt: INSTRUCOES, tools: [], maxTurns: 1, settingSources: [], persistSession: false, abortController: parar },
     })) {
-      if (mensagem.type === "result") return textoDoResultado(mensagem);
+      if (mensagem.type === "result") return { texto: textoDoResultado(mensagem), tokens: tokensDoResultado(mensagem) };
     }
     return null;
   } finally {

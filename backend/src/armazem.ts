@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { join } from "node:path";
 import type { RelatorioBase } from "./luisa/contagem.ts";
 
-export type Relatorio = RelatorioBase & { id: string; manual: boolean; resumo: string | null };
+export type Relatorio = RelatorioBase & { id: string; manual: boolean; resumo: string | null; tokens: number };
 export type Armazem = ReturnType<typeof criarArmazem>;
 
 const LIMITE = 120;
