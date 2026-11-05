@@ -12,9 +12,15 @@ const luisa = {
   relatorios: () => [],
   gerarAgora: async () => { gerados++; },
 };
+let geradosRafael = 0;
+const rafael = {
+  estado: () => ({ atividade: "Aguardando", progresso: 0, painel: { ativos: 410, semPromocao: 25 }, erro: null, atualizadoEm: null, proximo: "12:00" }),
+  relatorios: () => [],
+  gerarAgora: async () => { geradosRafael++; },
+};
 const publico = mkdtempSync(join(tmpdir(), "publico-"));
 writeFileSync(join(publico, "index.html"), "<h1>Escritorio</h1>");
-const servidor = criarServidor({ luisa, publico, inscrever: () => () => {} });
+const servidor = criarServidor({ agentes: { luisa, rafael }, publico, inscrever: () => () => {} });
 let base = "";
 
 before(async () => {
@@ -45,6 +51,24 @@ test("gerar relatório exige o cabeçalho que outros sites não conseguem enviar
   const r = await fetch(`${base}/api/luisa/gerar`, { method: "POST", headers: { "x-escritorio": "1" } });
   assert.equal(r.status, 202);
   assert.equal(gerados, antes + 1);
+});
+
+test("cada agente tem os seus dados e o seu botão", async () => {
+  const dados = await (await fetch(`${base}/api/rafael`)).json() as { estado: { proximo: string } };
+  assert.equal(dados.estado.proximo, "12:00");
+  assert.equal((await fetch(`${base}/api/rafael/gerar`, { method: "POST" })).status, 403);
+  const antesLuisa = gerados;
+  const r = await fetch(`${base}/api/rafael/gerar`, { method: "POST", headers: { "x-escritorio": "1" } });
+  assert.equal(r.status, 202);
+  assert.equal(geradosRafael, 1);
+  assert.equal(gerados, antesLuisa);
+});
+
+test("nome que não é de agente não abre nada", async () => {
+  for (const nome of ["ninguem", "__proto__", "constructor"]) {
+    assert.equal((await fetch(`${base}/api/${nome}`)).status, 404);
+    assert.equal((await fetch(`${base}/api/${nome}/gerar`, { method: "POST", headers: { "x-escritorio": "1" } })).status, 405);
+  }
 });
 
 test("não dá para sair da pasta pública pelo endereço", async () => {

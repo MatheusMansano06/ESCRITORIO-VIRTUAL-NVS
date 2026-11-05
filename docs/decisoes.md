@@ -11,7 +11,7 @@ A tela está em `frontend/public/index.html`.
 
 ## Agentes
 
-- **Equipe:** Luisa (ativa), Rafael (regra definida, a construir), Julio e Matheus (sem função definida).
+- **Equipe:** Luisa e Rafael (ativos), Julio e Matheus (sem função definida).
 - **IA:** cada agente usa só o necessário. Tarefas de conta e comparação são feitas por código comum, sem gastar tokens.
 
 ## Integração com a operação: aprovada em 04/11/2026
@@ -31,14 +31,15 @@ A tela está em `frontend/public/index.html`.
 - **Onde roda:** Railway. O painel só consulta os canais das 7:00 às 19:30 (Brasília), todos os dias.
 - **No Sistema Novaes:** a leitura de envio pendente e a chave de serviço estão no ar.
 
-## Agente Rafael: regra aprovada, ainda não construído
+## Agente Rafael: regra aprovada em 04/11/2026
 
 - **Plataforma:** Mercado Livre, anúncios ativos.
-- **Horários:** todo dia às 7:00, 12:00 e 16:00 (Brasília).
+- **Horários:** todo dia às 7:00, 12:00 e 16:00 (Brasília). Se o servidor reiniciar, o relatório sai assim que ele voltar, até o começo do horário seguinte. O último vai até 19:30.
 - **Tarefa:** listar só o SKU e o MLB dos anúncios sem promoção.
-- **Regra:** anúncio só com desconto próprio (`PRICE_DISCOUNT`) entra na lista, porque ainda falta a promoção.
+- **Regra:** anúncio só com desconto próprio (`PRICE_DISCOUNT`) entra na lista, porque ainda falta a promoção. Campanha agendada (`pending`) conta como promoção. Campanha só elegível (`candidate`) ou encerrada (`finished`) não conta.
+- **Anúncio que não respondeu:** não entra na lista e o relatório sai marcado como INCOMPLETO.
 - **Cérebro:** código comum, sem gastar tokens.
-- **Falta:** uma leitura nova no Sistema Novaes, que precisa de autorização para publicar.
+- **No Sistema Novaes:** a leitura `/api/agentes/anuncios-sem-promocao` está no ar.
 
 ## Onde o projeto fica
 

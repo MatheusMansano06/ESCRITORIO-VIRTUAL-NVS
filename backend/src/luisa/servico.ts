@@ -1,4 +1,5 @@
 import type { Armazem, Relatorio } from "../armazem.ts";
+import { criarFila } from "../fila.ts";
 import { contar, emBrasilia, emHorarioComercial, montarRelatorio, proximoHorario, relatorioDevido, type Contagem, type Leitura, type RelatorioBase, type TipoRelatorio } from "./contagem.ts";
 import type { Resumo } from "./resumo.ts";
 
@@ -23,13 +24,14 @@ type Dependencias = {
 
 export function criarLuisa({ lerPendentes, escreverResumo, armazem, agora = () => new Date(), aoMudar }: Dependencias) {
   const estado: EstadoLuisa = { atividade: "Aguardando", progresso: 0, painel: null, erro: null, atualizadoEm: null };
-  let ocupada = false;
   let ultimoManual = -Infinity;
 
   function mudar(parcial: Partial<EstadoLuisa>) {
     Object.assign(estado, parcial);
     aoMudar?.({ ...estado });
   }
+
+  const emFila = criarFila("luisa", (erro) => mudar({ atividade: "Não consegui consultar. Vou tentar de novo.", progresso: 0, erro }));
 
   async function ler(): Promise<Leitura> {
     mudar({ atividade: "Consultando Mercado Livre e Shopee", progresso: 35 });
@@ -52,21 +54,6 @@ export function criarLuisa({ lerPendentes, escreverResumo, armazem, agora = () =
     const relatorio: Relatorio = { ...base, id, manual, resumo: resumo?.texto ?? null, tokens: resumo?.tokens ?? 0 };
     armazem.salvar(relatorio);
     mudar({ atividade: "Relatório pronto", progresso: 100 });
-  }
-
-  /** Garante uma tarefa por vez; uma falha vira aviso na tela e nova tentativa no próximo ciclo. */
-  async function emFila(tarefa: () => Promise<void>) {
-    if (ocupada) return;
-    ocupada = true;
-    try {
-      await tarefa();
-    } catch (e) {
-      const erro = (e as Error).message;
-      console.error("[luisa] falha:", erro);
-      mudar({ atividade: "Não consegui consultar. Vou tentar de novo.", progresso: 0, erro });
-    } finally {
-      ocupada = false;
-    }
   }
 
   function painelVencido(): boolean {

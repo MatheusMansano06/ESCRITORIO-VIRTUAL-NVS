@@ -2,7 +2,7 @@
 
 Escritório virtual em 3D onde agentes de IA trabalham como uma equipe.
 
-Hoje a Luisa funciona com dados reais. Rafael, Julio e Matheus ainda aguardam função.
+Hoje a Luisa e o Rafael funcionam com dados reais. Julio e Matheus ainda aguardam função.
 
 ## Organização
 

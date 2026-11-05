@@ -13,17 +13,22 @@ const SEGURANCA = {
   "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://cdn.jsdelivr.net; frame-ancestors 'none'",
 };
 
-type LuisaNaTela = {
+type AgenteNaTela = {
   estado: () => unknown;
   relatorios: () => unknown[];
   gerarAgora: () => Promise<void>;
 };
 
 type Opcoes = {
-  luisa: LuisaNaTela;
+  agentes: Record<string, AgenteNaTela>;
   publico: string;
-  inscrever: (enviar: (dados: unknown) => void) => () => void;
+  inscrever: (enviar: (nome: string, dados: unknown) => void) => () => void;
 };
+
+/** O que a tela precisa de um agente. */
+export function retrato(agente: Pick<AgenteNaTela, "estado" | "relatorios">) {
+  return { estado: agente.estado(), relatorios: agente.relatorios().slice(0, 20) };
+}
 
 function json(res: ServerResponse, status: number, dados: unknown) {
   res.writeHead(status, { ...SEGURANCA, "content-type": "application/json", "cache-control": "no-store" });
@@ -46,7 +51,7 @@ function arquivoPublico(res: ServerResponse, publico: string, caminho: string) {
 function eventos(req: IncomingMessage, res: ServerResponse, inscrever: Opcoes["inscrever"]) {
   res.writeHead(200, { ...SEGURANCA, "content-type": "text/event-stream", "cache-control": "no-store", connection: "keep-alive" });
   res.write(": ligado\n\n");
-  const sair = inscrever((dados) => res.write(`event: luisa\ndata: ${JSON.stringify(dados)}\n\n`));
+  const sair = inscrever((nome, dados) => res.write(`event: ${nome}\ndata: ${JSON.stringify(dados)}\n\n`));
   const pulso = setInterval(() => res.write(": pulso\n\n"), 25_000);
   req.on("close", () => {
     clearInterval(pulso);
@@ -54,19 +59,19 @@ function eventos(req: IncomingMessage, res: ServerResponse, inscrever: Opcoes["i
   });
 }
 
-export function criarServidor({ luisa, publico, inscrever }: Opcoes) {
+export function criarServidor({ agentes, publico, inscrever }: Opcoes) {
   return createServer((req, res) => {
     const { pathname } = new URL(req.url ?? "/", "http://local");
     if (req.method === "GET" && pathname === "/health") return json(res, 200, { ok: true });
-
-    if (req.method === "GET" && pathname === "/api/luisa") {
-      return json(res, 200, { estado: luisa.estado(), relatorios: luisa.relatorios().slice(0, 20) });
-    }
     if (req.method === "GET" && pathname === "/api/eventos") return eventos(req, res, inscrever);
-    if (req.method === "POST" && pathname === "/api/luisa/gerar") {
+
+    const [, nome, gerar] = /^\/api\/(\w+)(\/gerar)?$/.exec(pathname) ?? [];
+    const agente = nome && Object.hasOwn(agentes, nome) ? agentes[nome] : null;
+    if (agente && !gerar && req.method === "GET") return json(res, 200, retrato(agente));
+    if (agente && gerar && req.method === "POST") {
       // Outro site aberto no navegador não consegue enviar este cabeçalho (CSRF).
       if (req.headers["x-escritorio"] !== "1") return json(res, 403, { erro: "pedido recusado" });
-      luisa.gerarAgora().catch((e) => console.error("[luisa] gerar:", (e as Error).message));
+      agente.gerarAgora().catch((e) => console.error(`[${nome}] gerar:`, (e as Error).message));
       return json(res, 202, { ok: true });
     }
     if (req.method === "GET") return arquivoPublico(res, publico, pathname);

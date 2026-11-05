@@ -1,14 +1,12 @@
-import type { Leitura } from "./luisa/contagem.ts";
-
 /** Pergunta ao Sistema Novaes, que guarda as conexões com os canais. Este projeto nunca vê essas chaves. */
-export function criarLeitorNovaes(url: string, chave: string) {
-  return async function lerPendentes(): Promise<Leitura> {
+export function criarLeitorNovaes<T>(url: string, chave: string, caminho: string, limiteMs: number) {
+  return async function ler(): Promise<T> {
     if (!url || !chave) throw new Error("NOVAES_URL ou AGENTES_API_KEY não configurada");
-    const resposta = await fetch(`${url}/api/agentes/envios-pendentes`, {
+    const resposta = await fetch(`${url}/api/agentes/${caminho}`, {
       headers: { "x-chave-agentes": chave },
-      signal: AbortSignal.timeout(170_000),
+      signal: AbortSignal.timeout(limiteMs),
     });
     if (!resposta.ok) throw new Error(`Sistema Novaes respondeu ${resposta.status}`);
-    return resposta.json() as Promise<Leitura>;
+    return resposta.json() as Promise<T>;
   };
 }
