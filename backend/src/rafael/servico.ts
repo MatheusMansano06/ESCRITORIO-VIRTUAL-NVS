@@ -64,8 +64,8 @@ function montarRelatorio(tipo: string, manual: boolean, leitura: LeituraAnuncios
     manual,
     ativos,
     semPromocao: anuncios.length,
-    resumo: `${anuncios.length} anúncios sem promoção, de ${ativos} ativos.${aviso}`,
-    texto: ["SKU\tMLB", ...anuncios.map((a) => `${a.sku ?? "sem SKU"}\t${a.mlb}`)].join("\n"),  // a tabulação separa as colunas ao colar numa planilha
+    resumo: `${anuncios.length} ${anuncios.length === 1 ? "anúncio" : "anúncios"} sem promoção, de ${ativos} ativos.${aviso}`,
+    texto: ["SKU\tMLB", ...anuncios.map((a) => `${a.sku || "sem SKU"}\t${a.mlb}`)].join("\n"),  // a tabulação separa as colunas ao colar numa planilha
     tokens: 0,
   };
 }

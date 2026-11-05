@@ -59,6 +59,14 @@ test("gera o relatório só com SKU e MLB", async () => {
   assert.equal(r.estado().proximo, "12:00");
 });
 
+test("SKU em branco aparece como sem SKU e um anúncio fica no singular", async () => {
+  const r = rafael({ lerAnuncios: async () => ({ ...LEITURA, anuncios: [{ sku: "", mlb: "MLB9" }] }) });
+  await r.tick();
+  const [relatorio] = r.relatorios();
+  assert.equal(relatorio.texto, "SKU\tMLB\nsem SKU\tMLB9");
+  assert.equal(relatorio.resumo, "1 anúncio sem promoção, de 410 ativos.");
+});
+
 test("não repete o relatório do mesmo horário", async () => {
   let leituras = 0;
   const r = rafael({ lerAnuncios: async () => { leituras++; return LEITURA; } });

@@ -52,6 +52,8 @@ A tela está em `frontend/public/index.html`.
 
 ## Pendências da Luisa
 
+- Os atrasados do Mercado Livre saltaram de 13 (04/11, 16:55) para 93 (05/11, de manhã). Falta comparar com o painel do Mercado Livre para saber se é real ou erro de contagem.
+- O relatório às vezes cita "JSON" no texto. Falta ajustar as instruções em `agentes/luisa.md`.
 - O prazo de despacho do Mercado Livre ainda vem vazio. A contagem usa a regra das 12:00, então os números não dependem dele.
 - O relatório aparece só no site. Telegram ou WhatsApp ainda não foram ligados.
 - Pedidos da Shopee em "tentar novamente" (`RETRY_SHIP`) não entram na leitura. Na conferência com o painel, os números bateram sem eles.
